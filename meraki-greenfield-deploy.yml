@@ -54,7 +54,7 @@
       net_name: {{ net_name }}
       state: present
       vlan_id: {{ data_vlan }}
-      name: DataVLAN
+      name: {{ data_vlan_name }}
       subnet: {{ data_subnet }}
       appliance_ip: {{ data_appliance_ip }}
     delegate_to: localhost
