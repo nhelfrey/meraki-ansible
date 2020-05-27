@@ -131,7 +131,7 @@
       vlan: {{ data_vlan }}
       voice_vlan: {{ voice_vlan }}
     delegate_to: localhost
-    with_sequence: start=1 end=44
+    with_sequence: start={{ sw_access_port_begin }} end={{ sw_access_port_end }}
     
 ###MX L7 Firewall Config###
 
