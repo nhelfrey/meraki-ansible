@@ -16,16 +16,16 @@ serial_number:
 switch1sn: switch1 sn
 data_vlan: 10
 data_vlan_name: DataVLAN
-data_subnet: 192.0.10.0/24
-data_appliance_ip: 192.0.10.1
+data_subnet: 192.168.10.0/24
+data_appliance_ip: 192.168.10.1
 guest_vlan: 20
 guest_vlan_name: GuestVLAN
-guest_subnet: 192.0.10.0/24
-guest_appliance_ip: 192.0.10.1
+guest_subnet: 192.168.20.0/24
+guest_appliance_ip: 192.168.20.1
 voice_vlan: 30
 voice_vlan_name: VoiceVLAN
-voice_subnet: 192.0.10.0/24
-voice_appliance_ip: 192.0.10.1
+voice_subnet: 192.168.30.0/24
+voice_appliance_ip: 192.168.300.1
 
 
 
