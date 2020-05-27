@@ -17,3 +17,4 @@
       - wireless
     timezone: {{ timezone }}
     tags: {{ tag1, tag2, tag3 }}
+    enable_vlans: yes
