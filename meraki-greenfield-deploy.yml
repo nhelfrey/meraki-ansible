@@ -43,6 +43,8 @@
   delegate_to: localhost
   loop: "{{ serial_number }}"
   
+###Switch Configuration###
+  
 - name: Configure uplink port
   meraki_switchport:
     auth_key: {{ auth_key }}
@@ -59,7 +61,7 @@
       - {{ voice_vlan }}
   delegate_to: localhost
   
-- name: Configure wireless AP port
+- name: Configure wireless AP port(s)
   meraki_switchport:
     auth_key: {{ auth_key }}
     state: present
@@ -73,37 +75,8 @@
       - {{ data_vlan }}
       - {{ guest_vlan }}
   delegate_to: localhost
+  with_sequence: start=45 end=47
   
-  - name: Configure wireless AP port
-  meraki_switchport:
-    auth_key: {{ auth_key }}
-    state: present
-    serial: {{ switch1sn }}
-    number: 46
-    enabled: true
-    name: Wireless
-    tags: Wireless
-    type: trunk
-    allowed_vlans:
-      - {{ data_vlan }}
-      - {{ guest_vlan }}
-  delegate_to: localhost
-  
-  - name: Configure wireless AP port
-  meraki_switchport:
-    auth_key: {{ auth_key }}
-    state: present
-    serial: {{ switch1sn }}
-    number: 45
-    enabled: true
-    name: Wireless
-    tags: Wireless
-    type: trunk
-    allowed_vlans:
-      - {{ data_vlan }}
-      - {{ guest_vlan }}
-  delegate_to: localhost
-
 - name: Configure access port(s) with voice VLAN
   meraki_switchport:
     auth_key: {{ auth_key }}
@@ -117,5 +90,5 @@
     vlan: {{ data_vlan }}
     voice_vlan: {{ voice_vlan }}
   delegate_to: localhost
-  loop: "{{ data_port }}"
+  with_sequence: start=1 end=44
   
