@@ -1,94 +1,110 @@
 ---
-
+- name: Configure 1 MX, 1 MS and 3 MR Greenfield
+  hosts: all
+  gather_facts: no
   vars_files:
     - ~/vars.yml
+  tasks:
+  - name: Create a new organization named {{ org_name }}
+    meraki_organization:
+      auth_key: {{ auth_key }}
+      org_name: {{ org_name }}
+      state: present
+    delegate_to: localhost
+    
+  - name: Create combined network named {{ net_name }} in the YourOrg organization
+    meraki_network:
+      auth_key: {{ auth_key }}
+      state: present
+      org_name: {{ org_name }}
+      net_name: {{ net_name }}
+      type:
+        - switch
+        - appliance
+        - wireless
+      timezone: {{ timezone }}
+      tags: {{ tag1, tag2, tag3 }}
+      enable_vlans: yes
+    
+  - name: Create new administrator with organization access
+    meraki_admin:
+      auth_key: {{ auth_key }}
+      org_name: {{ org_name }}
+      state: present
+      name: {{ org_admin_name }}
+      org_access: full
+      email: {{ org_admin_email }}
+    
+  - name: Claim a device into a network.
+    meraki_device:
+      auth_key: {{ auth_key }}
+      org_name: {{ org_name }}
+      net_name: {{ net_name }}
+      serial: {{ item }}
+      state: present
+    delegate_to: localhost
+    loop: "{{ serial_number }}"
+  
+###VLAN Creation###
 
-- name: Create a new organization named {{ org_name }}
-  meraki_organization:
-    auth_key: {{ auth_key }}
-    org_name: {{ org_name }}
-    state: present
-  delegate_to: localhost
-    
-- name: Create combined network named {{ net_name }} in the YourOrg organization
-  meraki_network:
-    auth_key: {{ auth_key }}
-    state: present
-    org_name: {{ org_name }}
-    net_name: {{ net_name }}
-    type:
-      - switch
-      - appliance
-      - wireless
-    timezone: {{ timezone }}
-    tags: {{ tag1, tag2, tag3 }}
-    enable_vlans: yes
-    
-- name: Create new administrator with organization access
-  meraki_admin:
-    auth_key: {{ auth_key }}
-    org_name: {{ org_name }}
-    state: present
-    name: {{ org_admin_name }}
-    org_access: full
-    email: {{ org_admin_email }}
-    
-- name: Claim a device into a network.
-  meraki_device:
-    auth_key: {{ auth_key }}
-    org_name: {{ org_name }}
-    net_name: {{ net_name }}
-    serial: {{ item }}
-    state: present
-  delegate_to: localhost
-  loop: "{{ serial_number }}"
+  - name: Create DATA VLAN
+    meraki_vlan:
+      auth_key: {{ auth_key }}
+      org_name: {{ org_name }}
+      net_name: {{ net_name }}
+      state: present
+      vlan_id: {{ data_vlan }}
+      name: DataVLAN
+      subnet: 192.0.10.0/24
+      appliance_ip: 192.0.10.1
+    delegate_to: localhost
   
-###Switch Configuration###
+###Switchport Configuration###
   
-- name: Configure uplink port
-  meraki_switchport:
-    auth_key: {{ auth_key }}
-    state: present
-    serial: {{ switch1sn }}
-    number: 48
-    enabled: true
-    name: Uplink Port to MX
-    tags: MX
-    type: trunk
-    allowed_vlans:
-      - {{ data_vlan }}
-      - {{ guest_vlan }}
-      - {{ voice_vlan }}
-  delegate_to: localhost
+  - name: Configure uplink port
+    meraki_switchport:
+      auth_key: {{ auth_key }}
+      state: present
+      serial: {{ switch1sn }}
+      number: 48
+      enabled: true
+      name: Uplink Port to MX
+      tags: MX
+      type: trunk
+      allowed_vlans:
+        - {{ data_vlan }}
+        - {{ guest_vlan }}
+        - {{ voice_vlan }}
+    delegate_to: localhost
   
-- name: Configure wireless AP port(s)
-  meraki_switchport:
-    auth_key: {{ auth_key }}
-    state: present
-    serial: {{ switch1sn }}
-    number: {{ item }}
-    enabled: true
-    name: Wireless
-    tags: Wireless
-    type: trunk
-    allowed_vlans:
-      - {{ data_vlan }}
-      - {{ guest_vlan }}
-  delegate_to: localhost
-  with_sequence: start=45 end=47
+  - name: Configure wireless AP port(s)
+    meraki_switchport:
+      auth_key: {{ auth_key }}
+      state: present
+      serial: {{ switch1sn }}
+      number: {{ item }}
+      enabled: true
+      name: Wireless
+      tags: Wireless
+      type: trunk
+      allowed_vlans:
+        - {{ data_vlan }}
+        - {{ guest_vlan }}
+    delegate_to: localhost
+    with_sequence: start=45 end=47
   
-- name: Configure access port(s) with voice VLAN
-  meraki_switchport:
-    auth_key: {{ auth_key }}
-    state: present
-    serial: {{ switch1sn }}
-    number: {{ item }}
-    enabled: true
-    name: Data
-    tags: Data
-    type: access
-    vlan: {{ data_vlan }}
-    voice_vlan: {{ voice_vlan }}
-  delegate_to: localhost
-  with_sequence: start=1 end=44
+  - name: Configure access port(s) with voice VLAN
+    meraki_switchport:
+      auth_key: {{ auth_key }}
+      state: present
+      serial: {{ switch1sn }}
+      number: {{ item }}
+      enabled: true
+      name: Data
+      tags: Data
+      type: access
+      vlan: {{ data_vlan }}
+      voice_vlan: {{ voice_vlan }}
+    delegate_to: localhost
+    with_sequence: start=1 end=44
   
