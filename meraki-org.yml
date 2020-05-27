@@ -4,3 +4,15 @@
     org_name: {{ org_name }}
     state: present
   delegate_to: localhost
+    
+- name: Create combined network named MyNet in the YourOrg organization
+  meraki_network:
+    auth_key: {{ auth_key }}
+    state: present
+    org_name: {{ org_name }}
+    net_name: {{ net_name }}
+    type:
+      - switch
+      - appliance
+    timezone: America/Chicago
+    tags: production, chicago
