@@ -18,3 +18,12 @@
     timezone: {{ timezone }}
     tags: {{ tag1, tag2, tag3 }}
     enable_vlans: yes
+    
+- name: Create new administrator with organization access
+  meraki_admin:
+    auth_key: {{ auth_key }}
+    org_name: {{ org_name }}
+    state: present
+    name: {{ org_admin_name }}
+    org_access: full
+    email: {{ org_admin_email }}
