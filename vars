@@ -1,2 +1,6 @@
 org_name: XXX
 auth_key: abc123
+net_name: network1
+tag1: tag1
+tag2: tag2
+tag3: tag3
