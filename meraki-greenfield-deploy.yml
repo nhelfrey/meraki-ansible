@@ -150,12 +150,6 @@
           - CN
           - KP
       - policy: deny
-        type: port
-        port: 8080
-      - type: port
-        port: 1234
-      - type: host
-        host: asdf.com
       - type: application
         application:
           id: meraki:layer7/application/205
