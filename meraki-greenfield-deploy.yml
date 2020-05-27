@@ -58,6 +58,30 @@
       subnet: {{ data_subnet }}
       appliance_ip: {{ data_appliance_ip }}
     delegate_to: localhost
+    
+  - name: Create Guest VLAN
+    meraki_vlan:
+      auth_key: {{ auth_key }}
+      org_name: {{ org_name }}
+      net_name: {{ net_name }}
+      state: present
+      vlan_id: {{ guest_vlan }}
+      name: {{ guest_vlan_name }}
+      subnet: {{ guest_subnet }}
+      appliance_ip: {{ guest_appliance_ip }}
+    delegate_to: localhost
+    
+  - name: Create Voice VLAN
+    meraki_vlan:
+      auth_key: {{ auth_key }}
+      org_name: {{ org_name }}
+      net_name: {{ net_name }}
+      state: present
+      vlan_id: {{ voice_vlan }}
+      name: {{ voice_vlan_name }}
+      subnet: {{ voice_subnet }}
+      appliance_ip: {{ voice_appliance_ip }}
+    delegate_to: localhost
   
 ###Switchport Configuration###
   
