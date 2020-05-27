@@ -55,8 +55,8 @@
       state: present
       vlan_id: {{ data_vlan }}
       name: DataVLAN
-      subnet: 192.0.10.0/24
-      appliance_ip: 192.0.10.1
+      subnet: {{ data_subnet }}
+      appliance_ip: {{ data_appliance_ip }}
     delegate_to: localhost
   
 ###Switchport Configuration###
