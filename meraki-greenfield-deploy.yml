@@ -4,6 +4,7 @@
   gather_facts: no
   vars_files:
     - ~/vars.yml
+  
   tasks:
   - name: Create a new organization named {{ org_name }}
     meraki_organization:
@@ -131,4 +132,35 @@
       voice_vlan: {{ voice_vlan }}
     delegate_to: localhost
     with_sequence: start=1 end=44
-  
+    
+###MX L7 Firewall Config###
+
+- name: Set firewall rules
+  meraki_mx_l7_firewall:
+    auth_key: {{ auth_key }}
+    org_name: {{ org_name }}
+    net_name: {{ net_name }}
+    state: present
+    rules:
+      - type: whitelisted_countries
+        countries:
+          - US
+      - type: blacklisted_countries
+        countries:
+          - CN
+          - KP
+      - policy: deny
+        type: port
+        port: 8080
+      - type: port
+        port: 1234
+      - type: host
+        host: asdf.com
+      - type: application
+        application:
+          id: meraki:layer7/application/205
+      - type: application_category
+        application:
+          id: meraki:layer7/category/24
+  delegate_to: localhost
+
