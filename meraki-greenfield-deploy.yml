@@ -32,3 +32,13 @@
     name: {{ org_admin_name }}
     org_access: full
     email: {{ org_admin_email }}
+    
+- name: Claim a device into a network.
+  meraki_device:
+    auth_key: {{ auth_key }}
+    org_name: {{ org_name }}
+    net_name: {{ net_name }}
+    serial: {{ item }}
+    state: present
+  delegate_to: localhost
+  loop: "{{ serial_number }}"
