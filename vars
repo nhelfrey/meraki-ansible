@@ -26,6 +26,8 @@ voice_vlan: 30
 voice_vlan_name: VoiceVLAN
 voice_subnet: 192.168.30.0/24
 voice_appliance_ip: 192.168.300.1
+sw_access_port_begin: 1
+sw_access_port_end: 44
 
 
 
