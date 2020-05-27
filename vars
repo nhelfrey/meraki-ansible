@@ -7,4 +7,11 @@ tag3: tag3
 timezone: America/Los_Angeles
 org_admin_name: "Jane Doe"
 org_admin_email: janedoe@gmail.com
+serial_number:
+  - devicesn1
+  - devicesn2
+  - devicesn3
+  - devicesn4
+  - devicesn5
+
 
