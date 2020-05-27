@@ -42,3 +42,19 @@
     state: present
   delegate_to: localhost
   loop: "{{ serial_number }}"
+  
+  - name: Configure uplink port
+  meraki_switchport:
+    auth_key: abc12345
+    state: present
+    serial: {{ switch1sn }}
+    number: 48
+    enabled: true
+    name: Uplink Port to MX
+    tags: MX
+    type: trunk
+    allowed_vlans:
+      - {{ data_vlan }}
+      - {{ guest_vlan }}
+      - {{ voice_vlan }}
+  delegate_to: localhost
