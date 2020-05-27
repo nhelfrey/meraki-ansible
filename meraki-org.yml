@@ -1,6 +1,6 @@
-- name: Create a new organization named YourOrg
+- name: Create a new organization named {{ org_name }}
   meraki_organization:
     auth_key: abc12345
-    org_name: YourOrg
+    org_name: {{ org_name }}
     state: present
   delegate_to: localhost
